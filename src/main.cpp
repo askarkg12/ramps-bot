@@ -10,12 +10,10 @@ void setup_serial(){
 
 bool is_connected = false;
 
-void setMotorSpeeds(){
-  
-}
+
 
 // This should be customisable
-void process_command(){
+void processCommand(){
   if (Serial.available() > 0){
     Command command = receiveCommand();
 
@@ -23,11 +21,11 @@ void process_command(){
       if (!is_connected)
       {
         is_connected = true;
-        send_command(HELLO);
+        sendCommand(HELLO);
       }
       else
       {
-        send_command(ALREADY_CONNECTED);
+        sendCommand(ALREADY_CONNECTED);
       }
     }
     else
@@ -42,13 +40,13 @@ void process_command(){
         }
         default:
         {
-          send_command(ERROR);
+          sendCommand(ERROR);
           break;
         }
       }
 
     }
-    send_command(RECEIVED); //Every command should return back with RECEIVED in the end.
+    sendCommand(RECEIVED); //Every command should return back with RECEIVED in the end.
   }
 }
 
@@ -57,9 +55,9 @@ void setup() {
   setup_serial();
 
   while (!is_connected){
-    send_command(HELLO);
+    sendCommand(HELLO);
     wait_for_bytes(1, 1000);
-    process_command();
+    processCommand();
   }
 }
 
