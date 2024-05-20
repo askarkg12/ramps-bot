@@ -1,5 +1,5 @@
-#ifndef PARAMETERS_H
-#define PARAMETERS_H
+#ifndef SERIAL_PARAMETERS_H
+#define SERIAL_PARAMETERS_H
 
 #define SERIAL_BAUD 115200  // Baudrate
 

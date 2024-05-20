@@ -3,6 +3,7 @@
 #include <serial_parameters.h>
 
 #include <comms.h>
+#include <commands.h>
 
 void setup_serial(){
   Serial.begin(SERIAL_BAUD);
@@ -56,7 +57,7 @@ void setup() {
 
   while (!is_connected){
     sendCommand(HELLO);
-    wait_for_bytes(1, 1000);
+    waitForBytes(1, 1000);
     processCommand();
   }
 }

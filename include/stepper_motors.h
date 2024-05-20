@@ -1,5 +1,5 @@
-#ifndef MOTOR_H
-#define MOTOR_H
+#ifndef STEPPER_MOTORS_H
+#define STEPPER_MOTORS_H
 
 #include <AccelStepper.h>
 // Define motor pins
@@ -19,9 +19,9 @@
 #define MOTOR4_DIR A7
 #define MOTOR4_EN A2
 
-AccelStepper stepper1(AccelStepper::DRIVER, MOTOR1_STEP, MOTOR1_DIR);
-AccelStepper stepper2(AccelStepper::DRIVER, MOTOR2_STEP, MOTOR2_DIR);
-AccelStepper stepper3(AccelStepper::DRIVER, MOTOR3_STEP, MOTOR3_DIR);
-AccelStepper stepper4(AccelStepper::DRIVER, MOTOR4_STEP, MOTOR4_DIR);
+AccelStepper stepperFL(AccelStepper::DRIVER, MOTOR1_STEP, MOTOR1_DIR);
+AccelStepper stepperFR(AccelStepper::DRIVER, MOTOR2_STEP, MOTOR2_DIR);
+AccelStepper stepperRL(AccelStepper::DRIVER, MOTOR3_STEP, MOTOR3_DIR);
+AccelStepper stepperRR(AccelStepper::DRIVER, MOTOR4_STEP, MOTOR4_DIR);
 
 #endif
