@@ -7,6 +7,7 @@ union FloatUnion{
     float value;
   };
 
-void send_command(Command command);
+Command receiveCommand(Command command);
+void sendCommand(Command command);
 void send_f32(float num);
-void wait_for_bytes(int numbBytes, unsigned long timeout_ms);
+void waitForBytes(int numbBytes, unsigned long timeout_ms);
