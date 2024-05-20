@@ -2,7 +2,7 @@
 #define COMMS_H
 
 #include <Arduino.h>
-#include <serial_parameters.h>
+#include <commands.h>
 
 union FloatUnion{
     byte buffer[4];

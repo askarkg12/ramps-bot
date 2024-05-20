@@ -1,8 +1,7 @@
  #include <Arduino.h>
+#include <comms.h>
 #include <stepper_motors.h>
 #include <serial_parameters.h>
-
-#include <comms.h>
 #include <commands.h>
 
 void setup_serial(){
@@ -12,6 +11,10 @@ void setup_serial(){
 bool is_connected = false;
 
 
+AccelStepper stepperFL(AccelStepper::DRIVER, MOTOR_FL_STEP, MOTOR_FL_DIR);
+AccelStepper stepperFR(AccelStepper::DRIVER, MOTOR_FR_STEP, MOTOR_FR_DIR);
+AccelStepper stepperRL(AccelStepper::DRIVER, MOTOR_RL_STEP, MOTOR_RL_DIR);
+AccelStepper stepperRR(AccelStepper::DRIVER, MOTOR_RR_STEP, MOTOR_RR_DIR);
 
 // This should be customisable
 void processCommand(){
@@ -36,7 +39,10 @@ void processCommand(){
         // Insert all commands here. Make sure that arduino and client are synchronised in how commands are processed.
         case SET_MOTOR_SPEEDS:
         {
-          setMotorSpeeds();
+          setMotorSpeed(stepperFL);
+          setMotorSpeed(stepperFR);
+          setMotorSpeed(stepperRL);
+          setMotorSpeed(stepperRR);
           break;
         }
         default:
@@ -54,6 +60,11 @@ void processCommand(){
 void setup() {
   // put your setup code here, to run once:
   setup_serial();
+
+  setupStepperMotor(stepperFL, MOTOR_FL_EN);
+  setupStepperMotor(stepperFR, MOTOR_FR_EN);
+  setupStepperMotor(stepperRL, MOTOR_RL_EN);
+  setupStepperMotor(stepperRR, MOTOR_RR_EN);
 
   while (!is_connected){
     sendCommand(HELLO);
