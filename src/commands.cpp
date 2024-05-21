@@ -4,9 +4,14 @@
 
 void setMotorSpeed(AccelStepper &stepper)
 {
-    float speed1 = receive_f32();
-    stepper.setSpeed(speed1);
+    stepper.setSpeed(receive_f32());
 }
 
-void readSetMotorSpeed(AccelStepper &stepper) {}
-void readRealMotorSpeed(AccelStepper &stepper) {}
+void readSetMotorSpeed(AccelStepper &stepper)
+{
+    send_f32(stepper.speed());
+}
+void readRealMotorSpeed(float realSpeed)
+{
+    send_f32(realSpeed);
+}

@@ -3,7 +3,8 @@
 
 #include <AccelStepper.h>
 
-enum Command {
+enum Command
+{
     HELLO = 0,
     RECEIVED = 1,
     ALREADY_CONNECTED = 2,
@@ -17,6 +18,6 @@ typedef enum Command Command;
 
 void setMotorSpeed(AccelStepper &stepper);
 void readSetMotorSpeed(AccelStepper &stepper);
-void readRealMotorSpeed(AccelStepper &stepper);
+void readRealMotorSpeed(float realSpeed);
 
 #endif
