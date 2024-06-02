@@ -7,11 +7,16 @@ void setMotorSpeed(AccelStepper &stepper)
     stepper.setSpeed(receive_f32());
 }
 
-void readSetMotorSpeed(AccelStepper &stepper)
+void readSetMotorSpeeds(AccelStepper &stepper)
 {
     send_f32(stepper.speed());
 }
-void readRealMotorSpeed(float realSpeed)
+void readRealMotorSpeeds(float realSpeed)
 {
     send_f32(realSpeed);
+}
+
+void enableMotor(AccelStepper &stepper)
+{
+    
 }

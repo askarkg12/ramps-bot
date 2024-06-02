@@ -2,6 +2,7 @@
 #include <comms.h>
 
 Command receiveCommand(){
+  waitForBytes(1, 200);
   return (Command) Serial.read();
 }
 
@@ -23,6 +24,12 @@ float receive_f32()
   waitForBytes(4, 200);
   Serial.readBytes(floatUnion.buffer, 4);
   return floatUnion.value;
+}
+
+int8_t receive_i8()
+{
+  waitForBytes(1, 200);
+  return (int8_t) Serial.read();
 }
 
 void waitForBytes(int numbBytes, unsigned long timeout_ms){

@@ -16,13 +16,18 @@ AccelStepper stepperFR(AccelStepper::DRIVER, MOTOR_FR_STEP, MOTOR_FR_DIR);
 AccelStepper stepperRL(AccelStepper::DRIVER, MOTOR_RL_STEP, MOTOR_RL_DIR);
 AccelStepper stepperRR(AccelStepper::DRIVER, MOTOR_RR_STEP, MOTOR_RR_DIR);
 
-MotorBundle MotorBundle_FL(stepperFL);
-MotorBundle MotorBundle_FR(stepperFR);
-MotorBundle MotorBundle_RL(stepperRL);
-MotorBundle MotorBundle_RR(stepperRR);
+AccelStepper* steppers[] = { &stepperFL, &stepperFR, &stepperRL, &stepperRR };
+
+MotorBundle motorBundle_FL(stepperFL);
+MotorBundle motorBundle_FR(stepperFR);
+MotorBundle motorBundle_RL(stepperRL);
+MotorBundle motorBundle_RR(stepperRR);
+
+MotorBundle* motorBundles[] = { &motorBundle_FL, &motorBundle_FR, &motorBundle_RL, &motorBundle_RR };
 
 float realSpeed_FL, realSpeed_FR, realSpeed_RL, realSpeed_RR;
 
+int8_t index = 200;
 // This should be customisable
 void processCommand()
 {
@@ -46,38 +51,60 @@ void processCommand()
     {
       switch (command)
       {
-      // Insert all commands here. Make sure that arduino and client are synchronized in how commands are processed.
-      case SET_MOTOR_SPEEDS:
-      {
-        setMotorSpeed(stepperFL);
-        setMotorSpeed(stepperFR);
-        setMotorSpeed(stepperRL);
-        setMotorSpeed(stepperRR);
-        break;
-      }
-      case READ_REAL_MOTOR_SPEEDS:
-      {
-        readRealMotorSpeed(MotorBundle_FL.realSpeed);
-        readRealMotorSpeed(MotorBundle_FR.realSpeed);
-        readRealMotorSpeed(MotorBundle_RL.realSpeed);
-        readRealMotorSpeed(MotorBundle_RR.realSpeed);
-        break;
-      }
-      case READ_SET_MOTOR_SPEEDS:
-      {
-        readSetMotorSpeed(stepperFL);
-        readSetMotorSpeed(stepperFR);
-        readSetMotorSpeed(stepperRL);
-        readSetMotorSpeed(stepperRR);
-      }
-      default:
-      {
-        sendCommand(ERROR);
-        break;
-      }
+        // Insert all commands here. Make sure that arduino and client are synchronized in how commands are processed.
+        case SET_MOTOR_SPEEDS: {
+          setMotorSpeed(stepperFL);
+          setMotorSpeed(stepperFR);
+          setMotorSpeed(stepperRL);
+          setMotorSpeed(stepperRR);
+          break;
+        }
+        case READ_REAL_MOTOR_SPEEDS: {
+          readRealMotorSpeeds(motorBundle_FL.realSpeed);
+          readRealMotorSpeeds(motorBundle_FR.realSpeed);
+          readRealMotorSpeeds(motorBundle_RL.realSpeed);
+          readRealMotorSpeeds(motorBundle_RR.realSpeed);
+          break;
+        }
+        case READ_SET_MOTOR_SPEEDS: {
+          readSetMotorSpeeds(stepperFL);
+          readSetMotorSpeeds(stepperFR);
+          readSetMotorSpeeds(stepperRL);
+          readSetMotorSpeeds(stepperRR);
+          break;
+        }
+        case ENABLE_MOTOR: {
+          index = receive_i8();
+          steppers[index]->enableOutputs();
+          break;
+        }
+        case DISABLE_MOTOR: {
+          index = receive_i8();
+          steppers[index]->disableOutputs();
+          break;
+        }
+        case SET__MOTOR_SPEED: {
+          index = receive_i8();
+          steppers[index]->setSpeed(receive_f32());
+          break;
+        }
+        case READ_SET_MOTOR_SPEED: {
+          index = receive_i8();
+          send_f32(steppers[index]->speed());
+          break;
+        }
+        case READ_REAL_MOTOR_SPEED: {
+          index = receive_i8();
+          send_f32(motorBundles[index]->realSpeed);
+          break;
+        }
+        default: {
+          sendCommand(ERROR);
+          break;
+        }
       }
     }
-    sendCommand(RECEIVED); // Every command should return back with RECEIVED in the end.
+    sendCommand(RECEIVED);  // Every command should return back with RECEIVED in the end.
   }
 }
 
@@ -104,8 +131,8 @@ void loop()
   // put your main code here, to run repeatedly:
   processCommand();
 
-  MotorBundle_FL.runSpeedTracked();
-  MotorBundle_FR.runSpeedTracked();
-  MotorBundle_RL.runSpeedTracked();
-  MotorBundle_RR.runSpeedTracked();
+  motorBundle_FL.runSpeedTracked();
+  motorBundle_FR.runSpeedTracked();
+  motorBundle_RL.runSpeedTracked();
+  motorBundle_RR.runSpeedTracked();
 }

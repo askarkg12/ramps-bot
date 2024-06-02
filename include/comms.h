@@ -11,6 +11,7 @@ union FloatUnion{
 
 Command receiveCommand();
 float receive_f32();
+int8_t receive_i8();
 
 void sendCommand(Command command);
 void send_f32(float num);
